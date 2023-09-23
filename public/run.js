@@ -1,0 +1,149 @@
+const list = [{
+    "filename": "1-TestFile-0",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.239252Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-1",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.27326Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-2",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.279261Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-3",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.286495Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-4",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.29166Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-5",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.297887Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-6",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.303005Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-7",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.307961Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-8",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.313108Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-9",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.318204Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-10",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.339596Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-11",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.344628Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-12",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.349629Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-13",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.35463Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-14",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.358676Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-15",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.364827Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-16",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.369982Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-17",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.376325Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-18",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 0,
+    "dateCreated": "2023-09-19T08:16:37.382489Z",
+    "tags": ""
+}, {
+    "filename": "1-TestFile-19",
+    "userId": "test_id",
+    "type": "test",
+    "accessibility": 1,
+    "dateCreated": "2023-09-19T08:16:37.386609Z",
+    "tags": ""
+}];
+
+
+
+const filter = ["0","1","2"]
+for(let i = 0; i<list.length; i++){
+    console.log(filter.indexOf(list[i].accessibility))
+}
+console.log("final", list.filter(e => filter.includes(e.accessibility)));
