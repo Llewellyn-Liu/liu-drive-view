@@ -2,12 +2,12 @@
 import {defineComponent} from 'vue'
 
 export default defineComponent({
-name: "ErrorPanel"
+  name: "ErrorPanel"
 })
 </script>
 
 <template>
-  $END$
+<v-btn>Error</v-btn>
 </template>
 
 <style scoped>

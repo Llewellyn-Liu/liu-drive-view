@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {id} from "vuetify/locale";
 
-export const useImageListStore = defineStore('image-list', {
+export const useGalleryListStore = defineStore('gallery-list', {
     state: () => ({
         list: [],
         size: 0,
@@ -14,6 +14,11 @@ export const useImageListStore = defineStore('image-list', {
     actions: {
         setList(fileList) {
             this.list = fileList;
-        }
+        },
+
+        clear() {
+            this.list = [];
+            this.memo = [];
+        },
     }
 })

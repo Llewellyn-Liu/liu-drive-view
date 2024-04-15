@@ -1,6 +1,6 @@
 <script>
 import {useUserStore} from "@/stores/user";
-import {useImageListStore} from "@/stores/imageList";
+import {useImageListStore} from "@/stores/GalleryList";
 import {fi} from "vuetify/locale";
 
 export default {

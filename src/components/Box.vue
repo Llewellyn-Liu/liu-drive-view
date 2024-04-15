@@ -128,6 +128,7 @@ export default {
 </script>
 
 <template>
+BOX
   <v-container fluid>
     <!--  Checkbox group-->
     <v-row dense>
@@ -274,6 +275,9 @@ export default {
     </v-card>
   </v-dialog>
 
+  <v-bottom-navigation>
+    <v-btn>ABC</v-btn>
+  </v-bottom-navigation>
 
   <!--  <div> This is BOX - id: {{ user.id }}, token: {{ user.token }}</div>-->
   <!--  <v-btn @click="testFastUpload">TestFastUpload</v-btn>-->

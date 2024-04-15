@@ -1,6 +1,6 @@
 {
   "name": "liu-drive-view",
-  "version": "0.0.0",
+  "version": "0.1.4-dev",
   "private": true,
   "scripts": {
     "dev": "vite",

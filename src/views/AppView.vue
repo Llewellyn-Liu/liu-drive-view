@@ -8,6 +8,7 @@ import UploadPanel from "@/components/UploadPanel.vue";
 import {useLoggerStore} from "@/stores/logger";
 
 import {defineComponent} from 'vue'
+import {lg_sendLoginRequest} from "@/utils/methods";
 
 export default defineComponent({
   name: "app-view",
@@ -49,7 +50,6 @@ export default defineComponent({
       dr_uploadPanelOpen: false,
       sc_alertOpen: false,
       sc_alertType: "success",
-      barLoginButtonContent: "Login",
 
       sc_testConnection: null,
 
@@ -57,6 +57,12 @@ export default defineComponent({
       sc_alertContent: 'Happy',
 
       test_imageData: "",
+
+      user: {
+        username: "",
+        password: "",
+        userId: "",
+      },
 
       //rules
       rules: {
@@ -71,8 +77,7 @@ export default defineComponent({
   methods: {
 
     loginButtonController() {
-      if (this.userStore.userLoggedIn) this.logout();
-      else this.dialog = true
+      this.dialog = true
     },
 
     lg_loginButtonController() {
@@ -82,69 +87,25 @@ export default defineComponent({
     },
 
     async login() {
-      const response = await this.lg_sendLoginRequest();
-      this.userStore.clearPassword(); //For security purpose
+      const response = await lg_sendLoginRequest(this.user.username, this.user.password);
+      this.user.password = ""; //For security purpose
 
       if (response.status === 200) {
         this.userStore.setUser(response.data.userId, response.data.username, response.data.token, true);
-        console.log("Debug: " + this.userStore.id + ", " + this.userStore.name + ", " + this.userStore.token)
         this.dialog = false; //close the login dialog
         this.loggerStore.success("Log in: " + this.userStore.id);
-        console.log("status 200:" + JSON.stringify(response));
-        console.log("status 200:" + this.userStore.getFormatInfo());
-        console.log("status 200: end")
+        console.log("Welcome,", this.userStore.id);
 
         this.switchBarLoginButtonContent()
 
         //Retrieve data from backend
-        const galleryFetchResult = await this.dr_galleryGet(0);
-        const fileFetchResult = await this.dr_objectFileListGet(0);
-        const memoFetchResult = await this.dr_memoGet();
+        await this.dr_refresh();
 
-        //Save into pinia
-        this.galleryListStore.setList(galleryFetchResult);
-        this.fileListStore.setList(fileFetchResult);
-        this.fileListStore.setMemo(memoFetchResult);
-
-        console.log("Object File List: ", JSON.stringify(this.fileListStore.list));
-        console.log("Memo List: ", JSON.stringify(this.fileListStore.memo));
-        console.log("Gallery GET:", JSON.stringify(this.galleryListStore.list));
       } else {
-        console.log(response)
+        console.log("Unexpected status",response)
       }
     },
 
-    /**
-     * API v0.1.2 M4.1.1
-     * @returns {Promise<{data: {}, status: number}|{data: any, status: number}>}
-     * Data format:{"userId":"", "username":"", "token":""}
-     */
-    async lg_sendLoginRequest() {
-      console.log("login")
-      const loginResult = await fetch("/drive/auth", {
-        method: "POST",
-        body: JSON.stringify({
-          'username': this.userStore.name,
-          'password': this.userStore.password,
-        }),
-        headers: new Headers({
-          'Authorization': 'Basic ' + btoa(this.userStore.name + ':' + this.userStore.password),
-          'Content-Type': 'application/json'
-        }),
-      });
-
-      if (loginResult.status === 200) {
-        return {
-          "data": await loginResult.json(),
-          "status": loginResult.status
-        };
-      } else {
-        return {
-          "data": {},
-          "status": loginResult.status
-        }
-      }
-    },
 
     switchBarLoginButtonContent() {
 
@@ -156,8 +117,10 @@ export default defineComponent({
       //Clear all necessary local storage
       this.userStore.clearUser();
       this.fileListStore.clear();
+      this.galleryListStore.clear();
 
       this.switchBarLoginButtonContent();
+      this.$router.push("/");
     },
 
 
@@ -188,7 +151,7 @@ export default defineComponent({
         console.log("status 200:" + JSON.stringify(response))
 
       } else {
-        console.log(response)
+        console.log("Unexpected status", response)
       }
     },
 
@@ -278,7 +241,7 @@ export default defineComponent({
       }).then((res) => res.json());
 
 
-      console.log("Gallery Get: ", fileListRes)
+      console.log("GET ObjectFileList: ", fileListRes)
       return fileListRes;
     },
 
@@ -292,7 +255,7 @@ export default defineComponent({
       }).then((res) => res.json());
 
 
-      console.log("Gallery Get: ", fileListRes)
+      console.log("GET Memos: ", fileListRes)
       return fileListRes;
     },
 
@@ -310,6 +273,16 @@ export default defineComponent({
   },
   computed: {},
 
+  // 这个router跳转处理钩子真nb。提供了一个then callback方法用来处理跳转成功后的内容，c为Component实例本身
+  // then外部的为该路由过程的处理，如果代码没通过，则会阻塞路由继续前进（也就是目标页面打不开）
+  beforeRouteEnter(to, from, then) {
+    then(c => {
+      if (from.name === "default") {
+        c.dr_refresh()
+      }
+    })
+  },
+
   components: {
     UploadPanel,
     SideBar
@@ -325,13 +298,13 @@ export default defineComponent({
 </script>
 
 <template>
-  Hi, this is app.
   <v-app>
     <v-app-bar title="Drive">
       <!--      <v-btn @click="dr_uploadPanelOpen=true" :disabled="!userStore.userLoggedIn" density="default"-->
       <v-btn @click="dr_uploadPanelOpen=true" density="default"
              icon="mdi-plus"></v-btn>
-      <v-btn @click="loginButtonController" id="lg_loginBtTopBar">{{ barLoginButtonContent }}</v-btn>
+      <v-btn @click="loginButtonController" v-show="!this.userStore.userLoggedIn">Login</v-btn>
+      <v-btn @click="logout" v-show="this.userStore.userLoggedIn">Logout</v-btn>
       <v-card style="width: 20vw; max-width: 25em" v-if="userStore.userLoggedIn">
         <v-card-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg">
           <div class="text-h6 mb-1">{{ userStore.id }}</div>
@@ -339,15 +312,12 @@ export default defineComponent({
         </v-card-item>
       </v-card>
       <v-btn @click="dr_refresh" icon="mdi-refresh"></v-btn>
-      <v-btn>
-        <RouterLink :to="'/gallery/' + userStore.id">Gallery</RouterLink>
-      </v-btn>
-      <v-btn>
-        <RouterLink :to="'/another/' + userStore.id">/another</RouterLink>
+      <v-btn>Gallery
+        <RouterLink :to="'/gallery/' + userStore.id"></RouterLink>
       </v-btn>
 
-      <v-btn onclick="console.log('Btn pressed')">
-        <RouterLink :to="'/box/'+userStore.id">Box</RouterLink>
+      <v-btn>Box
+        <RouterLink :to="'/box/'+userStore.id"></RouterLink>
       </v-btn>
     </v-app-bar>
 
@@ -371,9 +341,9 @@ export default defineComponent({
         <v-card-text>
           Login
           <v-form @submit.prevent>
-            <v-text-field label="Username" v-model="userStore.name"></v-text-field>
-            <v-text-field label="Id" v-model="userStore.id" v-if="!lg_switch" :rules="[rules.idFormat]"></v-text-field>
-            <v-text-field label="Password" v-model="userStore.password" type="password"></v-text-field>
+            <v-text-field label="Username" v-model="user.username"></v-text-field>
+            <v-text-field label="Id" v-model="user.userId" v-if="!lg_switch" :rules="[rules.idFormat]"></v-text-field>
+            <v-text-field label="Password" v-model="user.password" type="password"></v-text-field>
             <v-text-field label="Confirm" v-model="lg_pswdConfirm" v-if="!lg_switch"
                           type="password" :rules="[samePassword]"></v-text-field>
             <v-btn @click="lg_loginButtonController" :disabled="lg_pswdConfirmNotPassed">{{
@@ -395,7 +365,7 @@ export default defineComponent({
     </v-dialog>
 
     <!--    Upload Dialog-->
-    <v-dialog v-model="dr_uploadPanelOpen" width="55%">
+    <v-dialog v-model="dr_uploadPanelOpen" width="55vw" min-height="50vh">
       <v-card>
         <v-card-title class="align-end">Upload</v-card-title>
 
@@ -418,7 +388,6 @@ export default defineComponent({
   </v-app>
 
 </template>
-
 
 
 <style scoped>

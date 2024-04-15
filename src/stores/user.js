@@ -3,7 +3,7 @@ import {id} from "vuetify/locale";
 
 export const useUserStore = defineStore('current-user', {
     state: () => ({
-        id: 'test_id',
+        id: '',
         name: '',
         password: '',
         token: '',
