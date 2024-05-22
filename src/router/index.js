@@ -4,6 +4,8 @@ import Intro from "@/components/Intro.vue";
 import ErrorPanel from "@/components/ErrorPanel.vue";
 import WelcomeView from "@/views/WelcomeView.vue";
 import AppView from "@/views/AppView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import RegisterView from "@/views/RegisterView.vue";
 
 const router = createRouter({
     // history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -29,7 +31,7 @@ const router = createRouter({
                     path: '',
                     name: 'app',
                     component: Gallery
-                },{
+                }, {
                     path: 'another',
                     name: 'intro',
                     component: Intro
@@ -45,12 +47,19 @@ const router = createRouter({
                 {
                     path: 'gallery',
                     name: 'gallery',
-                    // route level code-splitting
-                    // this generates a separate chunk (About.[hash].js) for this route
-                    // which is lazy-loaded when the route is visited.
                     component: Gallery
                 },
             ],
+        },
+        {
+            path: "/profile",
+            name: "profile",
+            component: ProfileView,
+        },
+        {
+            path: "/register",
+            name: "register",
+            component: RegisterView,
         },
     ]
 })

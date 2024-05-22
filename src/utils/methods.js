@@ -1,3 +1,4 @@
+
 /**
  * API v0.1.2 M4.1.1
  * @returns {{data: {}, status}}
@@ -62,7 +63,7 @@ export async function sendRegisterRequest(username, userId, password) {
         console.log("Register success.")
 
         return {
-            "data": loginResult.json(),
+            "data": await loginResult.json(),
             "status": loginResult.status
         };
 

@@ -1,13 +1,4 @@
 <template>
-  <div class="hover-controller">
-    <v-btn>Main Vue</v-btn>
-    <v-btn>
-      <RouterLink to="/page">Welcome Page</RouterLink>
-    </v-btn>
-    <v-btn>
-      <RouterLink to="/app/123">App Page</RouterLink>
-    </v-btn>
-  </div>
 
   <div class="window">
     <RouterView/>
